@@ -1,0 +1,561 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0172AFDBAE69F33346408987 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 25A629CB3BBA1975BE9050AD /* Assets.xcassets */; };
+		062F10488CBF8C7D1C5DA316 /* VeyraDockChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D29A2FE7708EB6C0A0CECF /* VeyraDockChrome.swift */; };
+		07A7B17F0BF29FDEC7743E83 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A179FBE6FFDBE90DC2C846 /* SceneDelegate.swift */; };
+		23918A91B5D91F0ECF6D4E04 /* VeyraShelfCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C34980BC731B631BFA3AE43 /* VeyraShelfCanvas.swift */; };
+		25C8A856826FA5467BF36544 /* VeyraCaptionRoll.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6305478B7A643D8B97672B4 /* VeyraCaptionRoll.swift */; };
+		3F3952A6B0BA0598E2076BD5 /* VeyraSurfaceKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9094B511C753222251B3EB94 /* VeyraSurfaceKit.swift */; };
+		4E3610D31A20F20AE8E00DA1 /* VeyraLinkLedger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D0F2A0A5C4412A67A17D16 /* VeyraLinkLedger.swift */; };
+		4F48B7967D327708E62198E1 /* VeyraMomentComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EADEB0D48C3EF1D2945B22 /* VeyraMomentComposer.swift */; };
+		62DADCBEAFAAA6910B5A7D89 /* VeyraHighlightLeaf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190CC53CF46C6A11C44E69BE /* VeyraHighlightLeaf.swift */; };
+		70E8857F68F08E7B4B477ED5 /* VeyraMosaicCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F8A6AEA549DCE8DED4D689 /* VeyraMosaicCanvas.swift */; };
+		7A1F6A4C7896DA14A4B34FF7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2596834AFF37EA5CFE8D12D0 /* AppDelegate.swift */; };
+		7B43255EEA2C585859FCF2BF /* VeyraPreferenceCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3983762C6D50EE5417D1EF /* VeyraPreferenceCanvas.swift */; };
+		812042D95C191EA891930E68 /* VeyraTripMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F94FCF8B888EC54A4973771 /* VeyraTripMaker.swift */; };
+		9FC9780EFD541303ECFEA9CC /* VeyraLedgerVault.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D669C25BFF806609D662FB /* VeyraLedgerVault.swift */; };
+		A5976C2087A3AC59C947B649 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 88FA0F77AA15805DEF23736D /* PrivacyInfo.xcprivacy */; };
+		A748286893AE50F40D660DD8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 872D33A41DF16563A93B9414 /* ContentView.swift */; };
+		A74EF8119BDBE003B3B94335 /* VeyraFolioModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B5E68BB3DA5250A3F26161 /* VeyraFolioModels.swift */; };
+		B55B9140E189609012604DDD /* VeyraTripLeaf.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CCF98AC38E5DAF6976AF12 /* VeyraTripLeaf.swift */; };
+		CF966CDEFC63F365FA898F03 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2D4F4518582F471B6DC2693 /* Main.storyboard */; };
+		D07025AD4EEE24D42E402569 /* VeyraCaptionEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C3529D2B636E5A6274C8859 /* VeyraCaptionEditor.swift */; };
+		E7A11ACE0000000000000A02 /* VeyraPlaceLeaf.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A11ACE0000000000000A01 /* VeyraPlaceLeaf.swift */; };
+		E7A11ACE0000000000000B02 /* VeyraTripReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A11ACE0000000000000B01 /* VeyraTripReading.swift */; };
+		EF17EF7927A5716D0B44FA76 /* VeyraWelcomeReel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335EB07DF0D4803E77E52DD7 /* VeyraWelcomeReel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		12D0F2A0A5C4412A67A17D16 /* VeyraLinkLedger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraLinkLedger.swift; sourceTree = "<group>"; };
+		190CC53CF46C6A11C44E69BE /* VeyraHighlightLeaf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraHighlightLeaf.swift; sourceTree = "<group>"; };
+		23A179FBE6FFDBE90DC2C846 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		2596834AFF37EA5CFE8D12D0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		25A629CB3BBA1975BE9050AD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		335EB07DF0D4803E77E52DD7 /* VeyraWelcomeReel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraWelcomeReel.swift; sourceTree = "<group>"; };
+		3C3529D2B636E5A6274C8859 /* VeyraCaptionEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraCaptionEditor.swift; sourceTree = "<group>"; };
+		4C34980BC731B631BFA3AE43 /* VeyraShelfCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraShelfCanvas.swift; sourceTree = "<group>"; };
+		581BCD2286CC0629FB2BCCA4 /* 366GlimmeraHarmonyPortal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 366GlimmeraHarmonyPortal.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		68F10C7DAAD037E76F0123C2 /* Pods-366GlimmeraHarmonyPortal.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-366GlimmeraHarmonyPortal.release.xcconfig"; path = "Target Support Files/Pods-366GlimmeraHarmonyPortal/Pods-366GlimmeraHarmonyPortal.release.xcconfig"; sourceTree = "<group>"; };
+		6F94FCF8B888EC54A4973771 /* VeyraTripMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraTripMaker.swift; sourceTree = "<group>"; };
+		872D33A41DF16563A93B9414 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		88FA0F77AA15805DEF23736D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		9094B511C753222251B3EB94 /* VeyraSurfaceKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraSurfaceKit.swift; sourceTree = "<group>"; };
+		B0EADEB0D48C3EF1D2945B22 /* VeyraMomentComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraMomentComposer.swift; sourceTree = "<group>"; };
+		BA3983762C6D50EE5417D1EF /* VeyraPreferenceCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraPreferenceCanvas.swift; sourceTree = "<group>"; };
+		C1D29A2FE7708EB6C0A0CECF /* VeyraDockChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraDockChrome.swift; sourceTree = "<group>"; };
+		C1D669C25BFF806609D662FB /* VeyraLedgerVault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraLedgerVault.swift; sourceTree = "<group>"; };
+		C2CCF98AC38E5DAF6976AF12 /* VeyraTripLeaf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraTripLeaf.swift; sourceTree = "<group>"; };
+		D1B08B592B0073ED08281813 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D1B5E68BB3DA5250A3F26161 /* VeyraFolioModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraFolioModels.swift; sourceTree = "<group>"; };
+		D2D4F4518582F471B6DC2693 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		D6305478B7A643D8B97672B4 /* VeyraCaptionRoll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraCaptionRoll.swift; sourceTree = "<group>"; };
+		D918D02034FA648308574430 /* Pods-366GlimmeraHarmonyPortal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-366GlimmeraHarmonyPortal.debug.xcconfig"; path = "Target Support Files/Pods-366GlimmeraHarmonyPortal/Pods-366GlimmeraHarmonyPortal.debug.xcconfig"; sourceTree = "<group>"; };
+		E7A11ACE0000000000000A01 /* VeyraPlaceLeaf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraPlaceLeaf.swift; sourceTree = "<group>"; };
+		E7A11ACE0000000000000B01 /* VeyraTripReading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraTripReading.swift; sourceTree = "<group>"; };
+		F8F8A6AEA549DCE8DED4D689 /* VeyraMosaicCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeyraMosaicCanvas.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2E366259E2B7939347CF0CAF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0B451676AE55743AFAC6EE97 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		106E3B3D06CB42AFE1CBED5A /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				335EB07DF0D4803E77E52DD7 /* VeyraWelcomeReel.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		1551245B00106D49FEED8C1C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				25A629CB3BBA1975BE9050AD /* Assets.xcassets */,
+				88FA0F77AA15805DEF23736D /* PrivacyInfo.xcprivacy */,
+				12D0F2A0A5C4412A67A17D16 /* VeyraLinkLedger.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		39EDE8420DD37A038F975786 /* Highlights */ = {
+			isa = PBXGroup;
+			children = (
+				190CC53CF46C6A11C44E69BE /* VeyraHighlightLeaf.swift */,
+				F8F8A6AEA549DCE8DED4D689 /* VeyraMosaicCanvas.swift */,
+			);
+			path = Highlights;
+			sourceTree = "<group>";
+		};
+		4395E6A3CFF8B053D8B8EEA7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D1B5E68BB3DA5250A3F26161 /* VeyraFolioModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		4912528DA8D313E20935008C /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				2596834AFF37EA5CFE8D12D0 /* AppDelegate.swift */,
+				F3BD50ACB0182B3E3165A87B /* Base.lproj */,
+				D1B08B592B0073ED08281813 /* Info.plist */,
+				23A179FBE6FFDBE90DC2C846 /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		53C0028EEF40E140EC7DF5F3 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				4395E6A3CFF8B053D8B8EEA7 /* Models */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		5485BE5FA1B134792F996EE0 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				BA3983762C6D50EE5417D1EF /* VeyraPreferenceCanvas.swift */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
+		66BDD985D5DADD82F7193D57 /* Captions */ = {
+			isa = PBXGroup;
+			children = (
+				3C3529D2B636E5A6274C8859 /* VeyraCaptionEditor.swift */,
+				D6305478B7A643D8B97672B4 /* VeyraCaptionRoll.swift */,
+			);
+			path = Captions;
+			sourceTree = "<group>";
+		};
+		711FE934F91FB01A151E89DC /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				66BDD985D5DADD82F7193D57 /* Captions */,
+				89DB2F227CB512E4C75BF5B3 /* Chrome */,
+				39EDE8420DD37A038F975786 /* Highlights */,
+				CA9E9F628823A98DD74DDE47 /* Journeys */,
+				106E3B3D06CB42AFE1CBED5A /* Onboarding */,
+				5485BE5FA1B134792F996EE0 /* Preferences */,
+				BFD78014F5ECA6EEA6DD37B6 /* Root */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		722474B65C48264A8FDEEA0E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				581BCD2286CC0629FB2BCCA4 /* 366GlimmeraHarmonyPortal.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		86B29C30FD605DA90B65814A /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				C1D669C25BFF806609D662FB /* VeyraLedgerVault.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		89DB2F227CB512E4C75BF5B3 /* Chrome */ = {
+			isa = PBXGroup;
+			children = (
+				C1D29A2FE7708EB6C0A0CECF /* VeyraDockChrome.swift */,
+				9094B511C753222251B3EB94 /* VeyraSurfaceKit.swift */,
+			);
+			path = Chrome;
+			sourceTree = "<group>";
+		};
+		9916ECCC20EA3D94BBCEBD6D /* 366GlimmeraHarmonyPortal */ = {
+			isa = PBXGroup;
+			children = (
+				4912528DA8D313E20935008C /* Application */,
+				53C0028EEF40E140EC7DF5F3 /* Domain */,
+				86B29C30FD605DA90B65814A /* Persistence */,
+				711FE934F91FB01A151E89DC /* Presentation */,
+				1551245B00106D49FEED8C1C /* Resources */,
+			);
+			path = 366GlimmeraHarmonyPortal;
+			sourceTree = "<group>";
+		};
+		BFD78014F5ECA6EEA6DD37B6 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				872D33A41DF16563A93B9414 /* ContentView.swift */,
+			);
+			path = Root;
+			sourceTree = "<group>";
+		};
+		CA9E9F628823A98DD74DDE47 /* Journeys */ = {
+			isa = PBXGroup;
+			children = (
+				B0EADEB0D48C3EF1D2945B22 /* VeyraMomentComposer.swift */,
+				E7A11ACE0000000000000A01 /* VeyraPlaceLeaf.swift */,
+				4C34980BC731B631BFA3AE43 /* VeyraShelfCanvas.swift */,
+				C2CCF98AC38E5DAF6976AF12 /* VeyraTripLeaf.swift */,
+				E7A11ACE0000000000000B01 /* VeyraTripReading.swift */,
+				6F94FCF8B888EC54A4973771 /* VeyraTripMaker.swift */,
+			);
+			path = Journeys;
+			sourceTree = "<group>";
+		};
+		D32A2ACC32462DDE56A52E14 = {
+			isa = PBXGroup;
+			children = (
+				9916ECCC20EA3D94BBCEBD6D /* 366GlimmeraHarmonyPortal */,
+				722474B65C48264A8FDEEA0E /* Products */,
+				DA5D9B6326566452AFA7381B /* Pods */,
+				0B451676AE55743AFAC6EE97 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		DA5D9B6326566452AFA7381B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D918D02034FA648308574430 /* Pods-366GlimmeraHarmonyPortal.debug.xcconfig */,
+				68F10C7DAAD037E76F0123C2 /* Pods-366GlimmeraHarmonyPortal.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		F3BD50ACB0182B3E3165A87B /* Base.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				D2D4F4518582F471B6DC2693 /* Main.storyboard */,
+			);
+			path = Base.lproj;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AA5E804FA74CCAAF9F638ADB /* 366GlimmeraHarmonyPortal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5EE46C04D57397858A6874D2 /* Build configuration list for PBXNativeTarget "366GlimmeraHarmonyPortal" */;
+			buildPhases = (
+				0CD75B7DAA8F5FCCA7DD9E4F /* [CP] Check Pods Manifest.lock */,
+				1063088899429DC266DB3E52 /* Sources */,
+				2E366259E2B7939347CF0CAF /* Frameworks */,
+				141671F35E89EC5B6B6D0C54 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = 366GlimmeraHarmonyPortal;
+			productName = 366GlimmeraHarmonyPortal;
+			productReference = 581BCD2286CC0629FB2BCCA4 /* 366GlimmeraHarmonyPortal.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		452477FDFD8F610926C52B56 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 2710;
+				TargetAttributes = {
+					AA5E804FA74CCAAF9F638ADB = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 296BC238320AD20A14B80F87 /* Build configuration list for PBXProject "366GlimmeraHarmonyPortal" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D32A2ACC32462DDE56A52E14;
+			productRefGroup = 722474B65C48264A8FDEEA0E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AA5E804FA74CCAAF9F638ADB /* 366GlimmeraHarmonyPortal */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		141671F35E89EC5B6B6D0C54 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CF966CDEFC63F365FA898F03 /* Main.storyboard in Resources */,
+				0172AFDBAE69F33346408987 /* Assets.xcassets in Resources */,
+				A5976C2087A3AC59C947B649 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0CD75B7DAA8F5FCCA7DD9E4F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-366GlimmeraHarmonyPortal-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1063088899429DC266DB3E52 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A1F6A4C7896DA14A4B34FF7 /* AppDelegate.swift in Sources */,
+				07A7B17F0BF29FDEC7743E83 /* SceneDelegate.swift in Sources */,
+				A74EF8119BDBE003B3B94335 /* VeyraFolioModels.swift in Sources */,
+				9FC9780EFD541303ECFEA9CC /* VeyraLedgerVault.swift in Sources */,
+				D07025AD4EEE24D42E402569 /* VeyraCaptionEditor.swift in Sources */,
+				25C8A856826FA5467BF36544 /* VeyraCaptionRoll.swift in Sources */,
+				062F10488CBF8C7D1C5DA316 /* VeyraDockChrome.swift in Sources */,
+				3F3952A6B0BA0598E2076BD5 /* VeyraSurfaceKit.swift in Sources */,
+				62DADCBEAFAAA6910B5A7D89 /* VeyraHighlightLeaf.swift in Sources */,
+				70E8857F68F08E7B4B477ED5 /* VeyraMosaicCanvas.swift in Sources */,
+				4F48B7967D327708E62198E1 /* VeyraMomentComposer.swift in Sources */,
+				23918A91B5D91F0ECF6D4E04 /* VeyraShelfCanvas.swift in Sources */,
+				B55B9140E189609012604DDD /* VeyraTripLeaf.swift in Sources */,
+				E7A11ACE0000000000000A02 /* VeyraPlaceLeaf.swift in Sources */,
+				E7A11ACE0000000000000B02 /* VeyraTripReading.swift in Sources */,
+				812042D95C191EA891930E68 /* VeyraTripMaker.swift in Sources */,
+				EF17EF7927A5716D0B44FA76 /* VeyraWelcomeReel.swift in Sources */,
+				7B43255EEA2C585859FCF2BF /* VeyraPreferenceCanvas.swift in Sources */,
+				A748286893AE50F40D660DD8 /* ContentView.swift in Sources */,
+				4E3610D31A20F20AE8E00DA1 /* VeyraLinkLedger.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		8FE9F25D96780FD94E9BACBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		BF2217389B7A965BA72A6B69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 68F10C7DAAD037E76F0123C2 /* Pods-366GlimmeraHarmonyPortal.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = 366GlimmeraHarmonyPortal/Application/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Glimmera Harmony Portal";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mic.gl1mm3r5h8rm9nyp2st3l;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		C1D3A8DA84ABF21ED0B8479A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D918D02034FA648308574430 /* Pods-366GlimmeraHarmonyPortal.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = 366GlimmeraHarmonyPortal/Application/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Glimmera Harmony Portal";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mic.gl1mm3r5h8rm9nyp2st3l;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		DE06B81D7701FE0412E015D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		296BC238320AD20A14B80F87 /* Build configuration list for PBXProject "366GlimmeraHarmonyPortal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8FE9F25D96780FD94E9BACBF /* Debug */,
+				DE06B81D7701FE0412E015D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5EE46C04D57397858A6874D2 /* Build configuration list for PBXNativeTarget "366GlimmeraHarmonyPortal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C1D3A8DA84ABF21ED0B8479A /* Debug */,
+				BF2217389B7A965BA72A6B69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 452477FDFD8F610926C52B56 /* Project object */;
+}
