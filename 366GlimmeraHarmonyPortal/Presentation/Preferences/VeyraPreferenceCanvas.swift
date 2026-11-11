@@ -11,8 +11,8 @@ struct VeyraPreferenceCanvas: View {
                 VStack(alignment: .leading, spacing: 14) {
                     VeyraStillFrame(key: VeyraStillRack.desk, height: 120)
                     VeyraHeaderBlock(
-                        title: "Setup",
-                        detail: "Notes stay on this device. Rate the experience, or read the privacy and terms pages."
+                        title: "Desk",
+                        detail: "Routes, stops, and closes stay on this device. Rate the ritual, or read the privacy and terms pages."
                     )
                     if let last = vault.lastActivityDate {
                         Text("Last saved change \(VeyraStampText.day(last)).")
@@ -21,7 +21,7 @@ struct VeyraPreferenceCanvas: View {
                             .lineLimit(nil)
                             .fixedSize(horizontal: false, vertical: true)
                     }
-                    Text("Journeys \(vault.trips.count) · Moments \(vault.moments.count) · Captions \(vault.captions.count) · Places \(vault.veyraDistinctPlaceCount())")
+                    Text("Routes \(vault.trips.count) · Stops \(vault.moments.count) · Pull notes \(vault.captions.count) · Closes \(vault.routeSeals.count)")
                         .font(.footnote)
                         .foregroundStyle(Color.veyraInk.opacity(0.8))
                         .lineLimit(nil)
@@ -53,7 +53,7 @@ struct VeyraPreferenceCanvas: View {
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("Journeys, moments, captions, and highlights stored on this device will be cleared.")
+            Text("Routes, stops, pull notes, and closes stored on this device will be cleared.")
         }
     }
 

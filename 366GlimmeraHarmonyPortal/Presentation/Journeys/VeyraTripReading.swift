@@ -17,7 +17,7 @@ struct VeyraTripReading: View {
                         VeyraHeaderBlock(title: trip.title, detail: trip.placeNote)
                         let slips = vault.veyraMoments(for: trip.id)
                         if slips.isEmpty {
-                            Text("This reading is waiting for the first moment.")
+                            Text("This reading is waiting for the first stop.")
                                 .font(.body)
                                 .foregroundStyle(Color.veyraInk)
                                 .lineLimit(nil)
@@ -28,7 +28,7 @@ struct VeyraTripReading: View {
                                     Text(VeyraStampText.day(slip.stampedOn))
                                         .font(.caption.weight(.bold))
                                         .foregroundStyle(Color.veyraMint)
-                                    Text("\(slip.iconGlyph)  \(slip.placeLine)")
+                                    Text("\(slip.veyraPull.title) · \(slip.iconGlyph)  \(slip.placeLine)")
                                         .font(.title3.weight(.semibold))
                                         .foregroundStyle(Color.veyraInk)
                                         .lineLimit(nil)
@@ -52,7 +52,7 @@ struct VeyraTripReading: View {
                             }
                         }
                     } else {
-                        Text("This journey is no longer on the shelf.")
+                        Text("This route is no longer on the rail.")
                             .font(.body)
                             .foregroundStyle(Color.veyraInk)
                             .lineLimit(nil)
@@ -62,7 +62,7 @@ struct VeyraTripReading: View {
                 .padding(16)
             }
         }
-        .navigationTitle("Reading")
+        .navigationTitle("Route reading")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.visible, for: .navigationBar)
     }

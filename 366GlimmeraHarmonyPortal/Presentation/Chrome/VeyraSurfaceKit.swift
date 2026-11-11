@@ -50,14 +50,19 @@ struct VeyraScreen<Content: View>: View {
             .background {
                 Color.veyraBackdrop
                     .overlay {
+                        Image("veyraNightGround")
+                            .resizable()
+                            .scaledToFill()
+                    }
+                    .overlay {
                         Image(still)
                             .resizable()
                             .scaledToFill()
-                            .opacity(0.3)
+                            .opacity(0.22)
                     }
                     .overlay {
                         LinearGradient(
-                            colors: [Color.veyraBackdrop.opacity(0.18), Color.veyraBackdrop.opacity(0.9)],
+                            colors: [Color.veyraBackdrop.opacity(0.2), Color.veyraBackdrop.opacity(0.88)],
                             startPoint: .top,
                             endPoint: .bottom
                         )
@@ -96,28 +101,75 @@ struct VeyraCard<Content: View>: View {
 
     var body: some View {
         content
-            .padding(.vertical, 14)
-            .padding(.trailing, 14)
-            .padding(.leading, 22)
+            .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
-                RoundedRectangle(cornerRadius: 26, style: .continuous)
-                    .fill(Color.veyraCard)
-                    .shadow(color: Color.black.opacity(0.14), radius: 8, y: 5)
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(Color.veyraCard.opacity(0.92))
+                    .shadow(color: Color.black.opacity(0.28), radius: 10, y: 6)
             )
-            .overlay(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 4, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [Color.veyraMint, Color.veyraGlow],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .frame(width: 7)
-                    .padding(.vertical, 18)
-                    .padding(.leading, 8)
+            .overlay(alignment: .top) {
+                RoundedRectangle(cornerRadius: 2, style: .continuous)
+                    .fill(Color.veyraMint)
+                    .frame(height: 3)
+                    .padding(.horizontal, 18)
+                    .padding(.top, 8)
             }
+    }
+}
+
+enum VeyraChromeArt {
+    static let primaryPlate = "veyraBtnPrimary"
+    static let quietPlate = "veyraBtnQuiet"
+    static let dockPlate = "veyraBtnDock"
+    static let check = "veyraIconCheck"
+    static let up = "veyraIconUp"
+    static let down = "veyraIconDown"
+    static let edit = "veyraIconEdit"
+    static let delete = "veyraIconDelete"
+    static let emptyRoute = "veyraIconEmptyRoute"
+    static let emptyPlus = "veyraIconEmptyPlus"
+    static let emptyCarry = "veyraIconEmptyCarry"
+}
+
+struct VeyraPlateSkin: View {
+    let name: String
+
+    private var cap: CGFloat {
+        name == VeyraChromeArt.dockPlate ? 26 : 18
+    }
+
+    var body: some View {
+        Image(name)
+            .resizable(
+                capInsets: EdgeInsets(top: cap, leading: cap, bottom: cap, trailing: cap),
+                resizingMode: .stretch
+            )
+            .accessibilityHidden(true)
+    }
+}
+
+struct VeyraPlateLabel: View {
+    let title: String
+    let plate: String
+    var titleColor: Color
+    var minHeight: CGFloat = 52
+
+    var body: some View {
+        Text(title)
+            .font(.headline)
+            .foregroundStyle(titleColor)
+            .multilineTextAlignment(.center)
+            .lineLimit(nil)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.vertical, 14)
+            .padding(.horizontal, 14)
+            .frame(maxWidth: .infinity, minHeight: minHeight)
+            .background {
+                VeyraPlateSkin(name: plate)
+                    .shadow(color: Color.black.opacity(0.28), radius: 8, y: 4)
+            }
+            .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 }
 
@@ -127,26 +179,7 @@ struct VeyraPrimaryButton: View {
 
     var body: some View {
         Button(action: action) {
-            Text(title)
-                .font(.headline)
-                .foregroundStyle(Color.veyraOnPrimary)
-                .multilineTextAlignment(.center)
-                .lineLimit(nil)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .padding(.horizontal, 12)
-                .background(
-                    Capsule(style: .continuous)
-                        .fill(
-                            LinearGradient(
-                                colors: [Color.veyraMint, Color.veyraGlow],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
-                        .shadow(color: Color.veyraMint.opacity(0.32), radius: 8, y: 4)
-                )
+            VeyraPlateLabel(title: title, plate: VeyraChromeArt.primaryPlate, titleColor: Color.veyraOnPrimary)
         }
         .buttonStyle(VeyraPressStyle())
     }
@@ -158,21 +191,84 @@ struct VeyraQuietButton: View {
 
     var body: some View {
         Button(action: action) {
-            Text(title)
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(Color.veyraMint)
-                .multilineTextAlignment(.center)
-                .lineLimit(nil)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .padding(.horizontal, 10)
-                .background(
-                    Capsule(style: .continuous)
-                        .stroke(Color.veyraMint, lineWidth: 1.5)
-                )
+            VeyraPlateLabel(
+                title: title,
+                plate: VeyraChromeArt.quietPlate,
+                titleColor: Color.veyraGlow,
+                minHeight: 48
+            )
         }
         .buttonStyle(VeyraPressStyle())
+    }
+}
+
+struct VeyraGlyphMark: View {
+    let name: String
+    var size: CGFloat = 28
+    var tint: Color = .veyraGlow
+
+    var body: some View {
+        Image(name)
+            .renderingMode(.template)
+            .resizable()
+            .scaledToFit()
+            .frame(width: size, height: size)
+            .foregroundStyle(tint)
+            .accessibilityHidden(true)
+    }
+}
+
+struct VeyraIconChip: View {
+    let title: String
+    let art: String
+    var enabled: Bool = true
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 6) {
+                VeyraGlyphMark(name: art, size: 18)
+                Text(title)
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(Color.veyraGlow)
+                    .lineLimit(1)
+            }
+            .padding(.horizontal, 12)
+            .frame(minWidth: 44, minHeight: 40)
+            .background {
+                VeyraPlateSkin(name: VeyraChromeArt.quietPlate)
+            }
+            .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .opacity(enabled ? 1 : 0.4)
+        }
+        .buttonStyle(VeyraPressStyle())
+        .disabled(enabled == false)
+    }
+}
+
+struct VeyraEmptyMark: View {
+    let art: String
+
+    var body: some View {
+        Image(art)
+            .resizable()
+            .scaledToFit()
+            .frame(width: 72, height: 72)
+            .shadow(color: Color.black.opacity(0.3), radius: 8, y: 4)
+            .accessibilityHidden(true)
+    }
+}
+
+struct VeyraQuietLinkLabel: View {
+    let title: String
+
+    var body: some View {
+        VeyraPlateLabel(
+            title: title,
+            plate: VeyraChromeArt.quietPlate,
+            titleColor: Color.veyraGlow,
+            minHeight: 48
+        )
     }
 }
 
@@ -206,18 +302,12 @@ struct VeyraBannerLine: View {
             .foregroundStyle(Color.veyraOnPrimary)
             .lineLimit(nil)
             .fixedSize(horizontal: false, vertical: true)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(12)
-            .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [Color.veyraMint, Color.veyraGlow],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-            )
+            .frame(maxWidth: .infinity, minHeight: 20, alignment: .leading)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .background {
+                VeyraPlateSkin(name: VeyraChromeArt.primaryPlate)
+            }
     }
 }
 
@@ -301,7 +391,7 @@ struct VeyraPlaceLink: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .buttonStyle(.plain)
-        .accessibilityHint("Shows every moment at this place")
+        .accessibilityHint("Shows every stop at this corner")
     }
 }
 
@@ -317,23 +407,29 @@ struct VeyraUndoLine: View {
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
                 Spacer(minLength: 8)
-                Button("Undo") {
+                Button {
                     vault.veyraUndoMomentDelete()
+                } label: {
+                    Text("Undo")
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(Color.veyraGlow)
+                        .lineLimit(1)
+                        .padding(.horizontal, 14)
+                        .frame(minHeight: 40)
+                        .background {
+                            VeyraPlateSkin(name: VeyraChromeArt.quietPlate)
+                        }
+                        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 }
-                .font(.subheadline.weight(.bold))
-                .foregroundStyle(Color.veyraOnPrimary)
+                .buttonStyle(VeyraPressStyle())
             }
-            .padding(12)
-            .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [Color.veyraMint, Color.veyraGlow],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-            )
+            .padding(.leading, 14)
+            .padding(.trailing, 8)
+            .padding(.vertical, 8)
+            .background {
+                VeyraPlateSkin(name: VeyraChromeArt.primaryPlate)
+                    .shadow(color: Color.black.opacity(0.3), radius: 8, y: 4)
+            }
             .padding(.horizontal, 16)
             .padding(.top, 8)
         }

@@ -5,21 +5,21 @@ struct VeyraWelcomeReel: View {
     @State private var page = 0
 
     private let pages: [(still: String, headline: String, detail: String)] = [
-        (VeyraStillRack.cliff, "Capture Moments", "Write a place, choose an icon, and keep the note inside a journey you can open later."),
-        (VeyraStillRack.lantern, "Add Annotations", "Attach a short caption and one scene picture to a moment you already saved."),
-        (VeyraStillRack.lake, "Start Your Journey", "Create a journey, add the first moment, then mark the ones you want in the highlight mosaic.")
+        (VeyraStillRack.cliff, "Tag the pull", "When something stops the walk, log the corner and tag it: light, sound, crowd, weather, memory, or detour."),
+        (VeyraStillRack.lantern, "Close the route", "Pick up to three stops to carry and write the residue that the next walk should remember."),
+        (VeyraStillRack.lake, "Read the brief", "The route rail keeps that close until you mark the brief read, with the quietest hour you usually log.")
     ]
 
     var body: some View {
         VeyraScreen(still: pages[page].still) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
-                    Text("Field notes")
+                    Text("Lantern Close")
                         .font(.system(.title, design: .serif).weight(.bold))
                         .foregroundStyle(Color.veyraInk)
                         .lineLimit(nil)
                         .fixedSize(horizontal: false, vertical: true)
-                    Text("Tap a wax seal to move between notes. The shelf opens after the last one.")
+                    Text("Tap a numbered seal to move between notes. The route rail opens after the last one.")
                         .font(.subheadline)
                         .foregroundStyle(Color.veyraInk.opacity(0.78))
                         .lineLimit(nil)
@@ -33,19 +33,13 @@ struct VeyraWelcomeReel: View {
                                 } label: {
                                     Text("\(index + 1)")
                                         .font(.headline.weight(.bold))
-                                        .foregroundStyle(page == index ? Color.veyraOnPrimary : Color.veyraMint)
+                                        .foregroundStyle(page == index ? Color.veyraOnPrimary : Color.veyraGlow)
                                         .frame(width: 48, height: 48)
                                         .background {
-                                            if page == index {
-                                                Circle().fill(
-                                                    LinearGradient(colors: [Color.veyraMint, Color.veyraGlow], startPoint: .top, endPoint: .bottom)
-                                                )
-                                            } else {
-                                                Circle().fill(Color.veyraCard)
-                                            }
+                                            VeyraPlateSkin(name: page == index ? VeyraChromeArt.primaryPlate : VeyraChromeArt.quietPlate)
+                                                .shadow(color: Color.black.opacity(page == index ? 0.35 : 0.18), radius: 6, y: 3)
                                         }
-                                        .overlay(Circle().stroke(Color.veyraMint, lineWidth: 1.5))
-                                        .shadow(color: Color.veyraMint.opacity(page == index ? 0.35 : 0), radius: 6, y: 3)
+                                        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                                 }
                                 .buttonStyle(VeyraPressStyle())
                                 .accessibilityLabel("Note \(index + 1)")
@@ -82,32 +76,18 @@ struct VeyraWelcomeReel: View {
                             page += 1
                         }
                     } label: {
-                        Text(page == pages.count - 1 ? "Open the shelf" : "Next note")
-                            .font(.headline)
-                            .foregroundStyle(Color.veyraOnPrimary)
-                            .multilineTextAlignment(.center)
-                            .lineLimit(nil)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 14)
-                            .padding(.horizontal, 12)
-                            .background(
-                                Capsule().fill(
-                                    LinearGradient(colors: [Color.veyraMint, Color.veyraGlow], startPoint: .leading, endPoint: .trailing)
-                                )
-                                .shadow(color: Color.veyraMint.opacity(0.3), radius: 8, y: 4)
-                            )
+                        VeyraPlateLabel(
+                            title: page == pages.count - 1 ? "Open the rail" : "Next note",
+                            plate: VeyraChromeArt.primaryPlate,
+                            titleColor: Color.veyraOnPrimary
+                        )
                     }
                     .buttonStyle(VeyraPressStyle())
 
                     Button {
                         vault.veyraMarkWelcomeDone()
                     } label: {
-                        Text("Skip the walk")
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(Color.veyraMint)
-                            .lineLimit(nil)
-                            .frame(maxWidth: .infinity, minHeight: 44)
+                        VeyraQuietLinkLabel(title: "Skip to the rail")
                     }
                     .buttonStyle(VeyraPressStyle())
                 }

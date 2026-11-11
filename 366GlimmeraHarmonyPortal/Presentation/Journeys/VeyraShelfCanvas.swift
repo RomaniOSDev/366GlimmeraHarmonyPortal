@@ -38,9 +38,44 @@ struct VeyraShelfCanvas: View {
                 LazyVStack(alignment: .leading, spacing: 14) {
                     VeyraStillFrame(key: VeyraStillRack.cliff)
                     VeyraHeaderBlock(
-                        title: "Journey shelf",
-                        detail: "Search a title, place, or note. Sort the shelf, then open a timeline for the full day order."
+                        title: "Route rail",
+                        detail: "Open a walk, log what pulled you off it, then close the route with up to three carries."
                     )
+                    if vault.veyraBriefIsOpen(), let seal = vault.veyraLatestSeal() {
+                        VeyraCard {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Next-walk brief")
+                                    .font(.caption.weight(.bold))
+                                    .foregroundStyle(Color.veyraMint)
+                                Text(vault.veyraTripTitle(seal.routeID))
+                                    .font(.headline)
+                                    .foregroundStyle(Color.veyraInk)
+                                    .lineLimit(nil)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Text(seal.residue)
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color.veyraInk.opacity(0.86))
+                                    .lineLimit(nil)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                let carried = vault.veyraCarriedMoments()
+                                if carried.isEmpty == false {
+                                    Text(carried.map(\.placeLine).joined(separator: " · "))
+                                        .font(.footnote)
+                                        .foregroundStyle(Color.veyraInk.opacity(0.8))
+                                        .lineLimit(nil)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                                Text(vault.veyraQuietHourLabel())
+                                    .font(.footnote)
+                                    .foregroundStyle(Color.veyraMint)
+                                    .lineLimit(nil)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                VeyraQuietButton(title: "Brief read") {
+                                    vault.veyraMarkBriefRead()
+                                }
+                            }
+                        }
+                    }
                     if let banner = vault.veyraBanner {
                         VeyraBannerLine(text: banner)
                     }
@@ -54,7 +89,7 @@ struct VeyraShelfCanvas: View {
                     if vault.showHints {
                         VeyraCard {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Start with one journey title and the place it belongs to. Moments can be added after that.")
+                                Text("Name the route, log the stop that pulled you aside, then close it with up to three carries.")
                                     .font(.subheadline)
                                     .foregroundStyle(Color.veyraInk)
                                     .lineLimit(nil)
@@ -65,21 +100,19 @@ struct VeyraShelfCanvas: View {
                             }
                         }
                     }
-                    VeyraPrimaryButton(title: "Create a journey") {
+                    VeyraPrimaryButton(title: "Open a route") {
                         makingTrip = true
                     }
                     if vault.trips.isEmpty {
                         VeyraCard {
                             VStack(alignment: .leading, spacing: 8) {
-                                Image(systemName: "mappin.circle")
-                                    .font(.largeTitle)
-                                    .foregroundStyle(Color.veyraMint)
-                                Text("Capture Your First Journey!")
+                                VeyraEmptyMark(art: VeyraChromeArt.emptyRoute)
+                                Text("No route is open")
                                     .font(.headline)
                                     .foregroundStyle(Color.veyraInk)
                                     .lineLimit(nil)
                                     .fixedSize(horizontal: false, vertical: true)
-                                Text("The shelf stays empty until you name a journey.")
+                                Text("Name the walk you want to close. Stops and a seal come after that.")
                                     .font(.subheadline)
                                     .foregroundStyle(Color.veyraInk.opacity(0.78))
                                     .lineLimit(nil)
@@ -88,11 +121,11 @@ struct VeyraShelfCanvas: View {
                         }
                     } else {
                         VeyraFieldShell {
-                            TextField("Search title, place, or note", text: $query)
+                            TextField("Search route, corner, or note", text: $query)
                                 .foregroundStyle(Color.veyraInk)
                                 .textInputAutocapitalization(.never)
                                 .autocorrectionDisabled()
-                                .accessibilityLabel("Search journeys")
+                                .accessibilityLabel("Search routes")
                         }
                         HStack(spacing: 8) {
                             ForEach(VeyraShelfOrder.allCases) { item in
@@ -101,13 +134,15 @@ struct VeyraShelfCanvas: View {
                                 } label: {
                                     Text(item.veyraTitle)
                                         .font(.caption.weight(.bold))
-                                        .foregroundStyle(shelfOrder == item ? Color.veyraOnPrimary : Color.veyraInk)
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 8)
-                                        .background(
-                                            Capsule(style: .continuous)
-                                                .fill(shelfOrder == item ? Color.veyraMint : Color.veyraCard)
-                                        )
+                                        .foregroundStyle(shelfOrder == item ? Color.veyraOnPrimary : Color.veyraGlow)
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.8)
+                                        .padding(.horizontal, 8)
+                                        .frame(maxWidth: .infinity, minHeight: 42)
+                                        .background {
+                                            VeyraPlateSkin(name: shelfOrder == item ? VeyraChromeArt.primaryPlate : VeyraChromeArt.quietPlate)
+                                        }
+                                        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                                 }
                                 .buttonStyle(VeyraPressStyle())
                             }
@@ -116,7 +151,7 @@ struct VeyraShelfCanvas: View {
                            let current = filteredTrips.first(where: { $0.id == currentID }) {
                             VeyraCard {
                                 VStack(alignment: .leading, spacing: 8) {
-                                    Text("Continue")
+                                    Text("Resume")
                                         .font(.caption.weight(.bold))
                                         .foregroundStyle(Color.veyraMint)
                                     HStack(alignment: .top, spacing: 10) {
@@ -137,14 +172,12 @@ struct VeyraShelfCanvas: View {
                                     NavigationLink {
                                         VeyraTripLeaf(tripID: current.id)
                                     } label: {
-                                        Text("Open timeline")
-                                            .font(.subheadline.weight(.semibold))
-                                            .foregroundStyle(Color.veyraOnPrimary)
-                                            .multilineTextAlignment(.center)
-                                            .lineLimit(nil)
-                                            .frame(maxWidth: .infinity)
-                                            .padding(.vertical, 12)
-                                            .background(Capsule().fill(Color.veyraMint))
+                                        VeyraPlateLabel(
+                                            title: "Open route",
+                                            plate: VeyraChromeArt.primaryPlate,
+                                            titleColor: Color.veyraOnPrimary,
+                                            minHeight: 48
+                                        )
                                     }
                                     .buttonStyle(VeyraPressStyle())
                                 }
@@ -171,7 +204,7 @@ struct VeyraShelfCanvas: View {
             VeyraTripMaker(existing: nil)
         }
         .confirmationDialog(
-            "Delete this journey?",
+            "Delete this route?",
             isPresented: Binding(
                 get: { pendingDelete != nil },
                 set: { if $0 == false { pendingDelete = nil } }
@@ -188,7 +221,7 @@ struct VeyraShelfCanvas: View {
                 pendingDelete = nil
             }
         } message: {
-            Text("Moments, captions, and highlights inside this journey will be removed.")
+            Text("Stops, pull notes, and the close stored for this route will be removed.")
         }
     }
 }
@@ -205,7 +238,7 @@ private struct VeyraTripFold: View {
                 VStack(alignment: .leading, spacing: 10) {
                     let slips = vault.veyraMoments(for: trip.id)
                     if slips.isEmpty {
-                        Text("No moments in this journey yet.")
+                        Text("No stops on this route yet.")
                             .font(.subheadline)
                             .foregroundStyle(Color.veyraInk.opacity(0.78))
                             .lineLimit(nil)
@@ -233,7 +266,7 @@ private struct VeyraTripFold: View {
                             .padding(.vertical, 4)
                         }
                     }
-                    VeyraQuietButton(title: "Add a moment") {
+                    VeyraQuietButton(title: "Log a stop") {
                         momentDraft = VeyraMomentSlip(
                             id: UUID(),
                             tripID: trip.id,
@@ -247,14 +280,12 @@ private struct VeyraTripFold: View {
                     NavigationLink {
                         VeyraTripLeaf(tripID: trip.id)
                     } label: {
-                        Text("Open timeline")
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(Color.veyraOnPrimary)
-                            .multilineTextAlignment(.center)
-                            .lineLimit(nil)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 12)
-                            .background(Capsule().fill(Color.veyraMint))
+                        VeyraPlateLabel(
+                            title: "Open route",
+                            plate: VeyraChromeArt.primaryPlate,
+                            titleColor: Color.veyraOnPrimary,
+                            minHeight: 48
+                        )
                     }
                     .buttonStyle(VeyraPressStyle())
                 }
@@ -273,7 +304,7 @@ private struct VeyraTripFold: View {
                             .foregroundStyle(Color.veyraInk.opacity(0.75))
                             .lineLimit(nil)
                             .fixedSize(horizontal: false, vertical: true)
-                        Text("\(vault.veyraMoments(for: trip.id).count) moments · \(VeyraStampText.day(trip.openedOn))")
+                        Text("\(vault.veyraMoments(for: trip.id).count) stops · \(VeyraStampText.day(trip.openedOn))")
                             .font(.caption)
                             .foregroundStyle(Color.veyraMint)
                             .lineLimit(nil)
@@ -282,7 +313,7 @@ private struct VeyraTripFold: View {
                 }
             }
             .tint(Color.veyraMint)
-            VeyraQuietButton(title: "Delete journey") {
+            VeyraQuietButton(title: "Delete route") {
                 pendingDelete = trip
             }
             .padding(.top, 8)

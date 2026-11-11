@@ -79,6 +79,8 @@ enum VeyraVaultKey {
     static let current = "veyra.qelm.currentItinerary"
     static let achievements = "veyra.qelm.achievements"
     static let lastActivity = "veyra.qelm.lastActivity"
+    static let seals = "veyra.qelm.routeSeals"
+    static let briefDay = "veyra.qelm.lastBriefDay"
 }
 
 @MainActor
@@ -92,6 +94,8 @@ final class VeyraLedgerVault: ObservableObject {
     @Published var currentItineraryID: UUID?
     @Published var achievementsUnlocked: [String: Date]
     @Published var lastActivityDate: Date?
+    @Published var routeSeals: [VeyraRouteSeal]
+    @Published var lastBriefDay: String?
     @Published var veyraBanner: String?
     @Published var veyraFocusLane: VeyraDockLane?
     @Published var undoNote: String?
@@ -124,6 +128,8 @@ final class VeyraLedgerVault: ObservableObject {
         } else {
             lastActivityDate = nil
         }
+        routeSeals = Self.veyraDecode([VeyraRouteSeal].self, key: VeyraVaultKey.seals, defaults: veyraDefaults) ?? []
+        lastBriefDay = veyraDefaults.string(forKey: VeyraVaultKey.briefDay)
         veyraBackfillMarks()
         VeyraPhotoStore.sweep(keeping: Set(moments.compactMap(\.photoFile)))
     }
@@ -158,12 +164,16 @@ final class VeyraLedgerVault: ObservableObject {
         veyraTouch()
         veyraPersist()
         veyraPulse()
-        veyraFlash("Journey saved.")
+        veyraFlash("Route saved.")
     }
 
     func veyraSaveMoment(_ slip: VeyraMomentSlip) {
         var next = slip
         let isNew = moments.contains(where: { $0.id == slip.id }) == false
+        next.pullHour = Calendar.current.component(.hour, from: Date())
+        if next.pullKind == nil {
+            next.pullKind = VeyraPullKind.light.rawValue
+        }
         if isNew {
             next.ordinal = veyraOrdinalForNew(next)
         } else if let existing = moments.first(where: { $0.id == slip.id }) {
@@ -192,7 +202,7 @@ final class VeyraLedgerVault: ObservableObject {
         veyraTouch()
         veyraPersist()
         veyraPulse()
-        veyraFlash(next.pinnedHighlight ? "Moment saved and added to highlights." : "Moment saved to the journey.")
+        veyraFlash(next.pinnedHighlight ? "Stop saved and offered for the close." : "Stop saved on the route.")
     }
 
     func veyraSaveCaption(_ leaf: VeyraCaptionLeaf) {
@@ -212,7 +222,7 @@ final class VeyraLedgerVault: ObservableObject {
         veyraTouch()
         veyraPersist()
         veyraPulse()
-        veyraFlash("Caption saved beside the moment.")
+        veyraFlash("Pull note saved.")
     }
 
     func veyraDeleteTrip(_ id: UUID) {
@@ -232,12 +242,13 @@ final class VeyraLedgerVault: ObservableObject {
         moments.removeAll { $0.tripID == id }
         captions.removeAll { momentIDs.contains($0.momentID) }
         highlightOrder.removeAll { momentIDs.contains($0) }
+        routeSeals.removeAll { $0.routeID == id }
         if currentItineraryID == id {
             currentItineraryID = nil
         }
         veyraTouch()
         veyraPersist()
-        veyraFlash("Journey removed.")
+        veyraFlash("Route removed.")
     }
 
     func veyraDeleteMoment(_ id: UUID) {
@@ -253,9 +264,10 @@ final class VeyraLedgerVault: ObservableObject {
         moments.removeAll { $0.id == id }
         captions.removeAll { $0.momentID == id }
         highlightOrder.removeAll { $0 == id }
+        veyraStripCarry(id)
         veyraTouch()
         veyraPersist()
-        veyraFlash("Moment removed.")
+        veyraFlash("Stop removed.")
     }
 
     func veyraStageMomentRemoval(_ id: UUID) {
@@ -269,8 +281,9 @@ final class VeyraLedgerVault: ObservableObject {
         moments.removeAll { $0.id == id }
         captions.removeAll { $0.momentID == id }
         highlightOrder.removeAll { $0 == id }
+        veyraStripCarry(id)
         momentUndo = VeyraMomentUndo(slip: slip, caption: caption, highlightIndex: highlightIndex)
-        undoNote = "Moment removed."
+        undoNote = "Stop removed."
         undoToken = UUID()
         let token = undoToken
         veyraTouch()
@@ -302,21 +315,25 @@ final class VeyraLedgerVault: ObservableObject {
         undoNote = nil
         veyraTouch()
         veyraPersist()
-        veyraFlash("Moment restored.")
+        veyraFlash("Stop restored.")
     }
 
     func veyraDeleteCaption(_ id: UUID) {
         captions.removeAll { $0.id == id }
         veyraTouch()
         veyraPersist()
-        veyraFlash("Caption removed.")
+        veyraFlash("Pull note removed.")
     }
 
     func veyraNudgeHighlight(_ id: UUID, upward: Bool) {
-        guard let index = highlightOrder.firstIndex(of: id) else { return }
+        guard let sealIndex = veyraLatestSealIndex() else { return }
+        var ids = routeSeals[sealIndex].carriedIDs
+        guard let index = ids.firstIndex(of: id) else { return }
         let target = upward ? index - 1 : index + 1
-        guard highlightOrder.indices.contains(target) else { return }
-        highlightOrder.swapAt(index, target)
+        guard ids.indices.contains(target) else { return }
+        ids.swapAt(index, target)
+        routeSeals[sealIndex].carriedIDs = ids
+        highlightOrder = ids
         veyraTouch()
         veyraPersist()
     }
@@ -357,9 +374,10 @@ final class VeyraLedgerVault: ObservableObject {
         guard let index = moments.firstIndex(where: { $0.id == id }) else { return }
         moments[index].pinnedHighlight = false
         highlightOrder.removeAll { $0 == id }
+        veyraStripCarry(id)
         veyraTouch()
         veyraPersist()
-        veyraFlash("Removed from highlights.")
+        veyraFlash("Removed from the carry.")
     }
 
     func veyraResetAll() {
@@ -372,6 +390,8 @@ final class VeyraLedgerVault: ObservableObject {
         currentItineraryID = nil
         achievementsUnlocked = [:]
         lastActivityDate = nil
+        routeSeals = []
+        lastBriefDay = nil
         veyraBanner = nil
         undoToken = UUID()
         undoTask?.cancel()
@@ -404,16 +424,19 @@ final class VeyraLedgerVault: ObservableObject {
     func veyraAchievementLines() -> [String] {
         var lines: [String] = []
         if let date = achievementsUnlocked["first-journey"] {
-            lines.append("First journey saved \(VeyraStampText.day(date)).")
+            lines.append("First route opened \(VeyraStampText.day(date)).")
         }
         if let date = achievementsUnlocked["first-moment"] {
-            lines.append("First moment saved \(VeyraStampText.day(date)).")
+            lines.append("First stop logged \(VeyraStampText.day(date)).")
         }
         if let date = achievementsUnlocked["first-caption"] {
-            lines.append("First caption saved \(VeyraStampText.day(date)).")
+            lines.append("First pull note saved \(VeyraStampText.day(date)).")
+        }
+        if let date = achievementsUnlocked["first-seal"] {
+            lines.append("First route closed \(VeyraStampText.day(date)).")
         }
         if let date = achievementsUnlocked["three-places"] {
-            lines.append("Three different places saved \(VeyraStampText.day(date)).")
+            lines.append("Three corners logged \(VeyraStampText.day(date)).")
         }
         return lines
     }
@@ -433,7 +456,7 @@ final class VeyraLedgerVault: ObservableObject {
     }
 
     func veyraTripTitle(_ id: UUID) -> String {
-        trips.first { $0.id == id }?.title ?? "Journey"
+        trips.first { $0.id == id }?.title ?? "Route"
     }
 
     func veyraFlash(_ text: String) {
@@ -527,6 +550,124 @@ final class VeyraLedgerVault: ObservableObject {
         } else {
             veyraDefaults.removeObject(forKey: VeyraVaultKey.lastActivity)
         }
+        pack(routeSeals, VeyraVaultKey.seals)
+        if let lastBriefDay {
+            veyraDefaults.set(lastBriefDay, forKey: VeyraVaultKey.briefDay)
+        } else {
+            veyraDefaults.removeObject(forKey: VeyraVaultKey.briefDay)
+        }
+    }
+
+    func veyraLatestSeal() -> VeyraRouteSeal? {
+        routeSeals.max { $0.sealedOn < $1.sealedOn }
+    }
+
+    func veyraSeal(for routeID: UUID) -> VeyraRouteSeal? {
+        routeSeals.first { $0.routeID == routeID }
+    }
+
+    func veyraBriefIsOpen() -> Bool {
+        guard veyraLatestSeal() != nil else { return false }
+        return lastBriefDay != veyraDayKey(Date())
+    }
+
+    func veyraMarkBriefRead() {
+        lastBriefDay = veyraDayKey(Date())
+        veyraPersist()
+    }
+
+    func veyraSaveSeal(routeID: UUID, carriedIDs: [UUID], residue: String) {
+        let trimmed = Array(carriedIDs.prefix(3))
+        if let index = routeSeals.firstIndex(where: { $0.routeID == routeID }) {
+            routeSeals[index].carriedIDs = trimmed
+            routeSeals[index].residue = residue
+            routeSeals[index].sealedOn = Date()
+        } else {
+            routeSeals.append(VeyraRouteSeal(
+                id: UUID(),
+                routeID: routeID,
+                carriedIDs: trimmed,
+                residue: residue,
+                sealedOn: Date()
+            ))
+        }
+        for index in moments.indices where moments[index].tripID == routeID {
+            moments[index].pinnedHighlight = trimmed.contains(moments[index].id)
+        }
+        highlightOrder = trimmed
+        if achievementsUnlocked["first-seal"] == nil {
+            achievementsUnlocked["first-seal"] = Date()
+        }
+        lastBriefDay = nil
+        veyraTouch()
+        veyraPersist()
+        veyraPulse()
+        veyraFlash("Route closed. The next-walk brief is on the rail.")
+    }
+
+    func veyraCarriedMoments() -> [VeyraMomentSlip] {
+        guard let seal = veyraLatestSeal() else { return [] }
+        return seal.carriedIDs.compactMap { id in moments.first { $0.id == id } }
+    }
+
+    func veyraPullTally() -> [VeyraPullCount] {
+        VeyraPullKind.allCases.map { kind in
+            VeyraPullCount(kind: kind, count: moments.filter { $0.veyraPull == kind && $0.pullKind != nil }.count)
+        }
+        .sorted { $0.count > $1.count }
+    }
+
+    func veyraPeakPullLabel() -> String {
+        guard let top = veyraPullTally().first(where: { $0.count > 0 }) else {
+            return "No pulls tagged yet."
+        }
+        return "Peak pull is \(top.kind.title) (\(top.count))."
+    }
+
+    func veyraQuietHourLabel() -> String {
+        guard moments.count >= 3 else {
+            return "Log three stops before a quiet hour appears."
+        }
+        var counts = Array(repeating: 0, count: 24)
+        for moment in moments {
+            let hour = moment.pullHour ?? Calendar.current.component(.hour, from: moment.stampedOn)
+            if (0..<24).contains(hour) {
+                counts[hour] += 1
+            }
+        }
+        let used = counts.enumerated().filter { $0.element > 0 }
+        guard used.count >= 2, let quiet = used.min(by: { $0.element < $1.element }) else {
+            return "Stops cluster in one hour. A quieter window needs another time of day."
+        }
+        let end = (quiet.offset + 1) % 24
+        return "Quietest log hour is \(veyraHourLabel(quiet.offset))–\(veyraHourLabel(end))."
+    }
+
+    private func veyraLatestSealIndex() -> Int? {
+        routeSeals.indices.max { routeSeals[$0].sealedOn < routeSeals[$1].sealedOn }
+    }
+
+    private func veyraStripCarry(_ id: UUID) {
+        for index in routeSeals.indices {
+            routeSeals[index].carriedIDs.removeAll { $0 == id }
+        }
+    }
+
+    private func veyraDayKey(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: date)
+    }
+
+    private func veyraHourLabel(_ hour: Int) -> String {
+        var parts = DateComponents()
+        parts.hour = hour
+        let date = Calendar.current.date(from: parts) ?? Date()
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US")
+        formatter.dateFormat = "h a"
+        return formatter.string(from: date)
     }
 
     private static func veyraDecode<T: Decodable>(_ type: T.Type, key: String, defaults: UserDefaults) -> T? {

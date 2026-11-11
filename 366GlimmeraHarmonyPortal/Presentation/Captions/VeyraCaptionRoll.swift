@@ -11,29 +11,60 @@ struct VeyraCaptionRoll: View {
                 Section {
                     VeyraStillFrame(key: VeyraStillRack.lantern, height: 120)
                     VeyraHeaderBlock(
-                        title: "Captions",
-                        detail: "Each caption stays attached to one moment and uses a scene picture from this set."
+                        title: "Pull radar",
+                        detail: "Every stop keeps the reason it stopped the walk. The peak pull and the quiet hour come from those tags."
                     )
+                    VeyraCard {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(vault.veyraPeakPullLabel())
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(Color.veyraInk)
+                                .lineLimit(nil)
+                                .fixedSize(horizontal: false, vertical: true)
+                            Text(vault.veyraQuietHourLabel())
+                                .font(.footnote)
+                                .foregroundStyle(Color.veyraMint)
+                                .lineLimit(nil)
+                                .fixedSize(horizontal: false, vertical: true)
+                            ForEach(vault.veyraPullTally()) { row in
+                                HStack {
+                                    Text(row.kind.title)
+                                        .font(.caption.weight(.bold))
+                                        .foregroundStyle(Color.veyraInk)
+                                        .frame(width: 72, alignment: .leading)
+                                    GeometryReader { proxy in
+                                        let width = vault.moments.isEmpty ? 0 : proxy.size.width * CGFloat(row.count) / CGFloat(max(vault.moments.count, 1))
+                                        RoundedRectangle(cornerRadius: 4, style: .continuous)
+                                            .fill(Color.veyraMint)
+                                            .frame(width: max(width, row.count == 0 ? 0 : 8), height: 8)
+                                            .frame(maxHeight: .infinity, alignment: .leading)
+                                    }
+                                    .frame(height: 12)
+                                    Text("\(row.count)")
+                                        .font(.caption.weight(.bold))
+                                        .foregroundStyle(Color.veyraInk)
+                                }
+                            }
+                        }
+                    }
                     if let banner = vault.veyraBanner {
                         VeyraBannerLine(text: banner)
                     }
                     if vault.moments.isEmpty {
                         VeyraCard {
                             VStack(alignment: .leading, spacing: 8) {
-                                Image(systemName: "plus.circle")
-                                    .font(.largeTitle)
-                                    .foregroundStyle(Color.veyraMint)
-                                Text("Add your first travel moment")
+                                VeyraEmptyMark(art: VeyraChromeArt.emptyPlus)
+                                Text("No stops yet")
                                     .font(.headline)
                                     .foregroundStyle(Color.veyraInk)
                                     .lineLimit(nil)
                                     .fixedSize(horizontal: false, vertical: true)
-                                Text("A caption needs a moment. Create one on the trip shelf first.")
+                                Text("A pull note needs a stop. Log one on the route rail first.")
                                     .font(.subheadline)
                                     .foregroundStyle(Color.veyraInk.opacity(0.78))
                                     .lineLimit(nil)
                                     .fixedSize(horizontal: false, vertical: true)
-                                VeyraPrimaryButton(title: "Go to trips") {
+                                VeyraPrimaryButton(title: "Go to routes") {
                                     vault.veyraFocusLane = .trips
                                 }
                             }
@@ -41,15 +72,13 @@ struct VeyraCaptionRoll: View {
                     } else if vault.captions.isEmpty {
                         VeyraCard {
                             VStack(alignment: .leading, spacing: 8) {
-                                Image(systemName: "plus.circle")
-                                    .font(.largeTitle)
-                                    .foregroundStyle(Color.veyraMint)
-                                Text("Add your first travel moment")
+                                VeyraEmptyMark(art: VeyraChromeArt.emptyPlus)
+                                Text("No pull notes yet")
                                     .font(.headline)
                                     .foregroundStyle(Color.veyraInk)
                                     .lineLimit(nil)
                                     .fixedSize(horizontal: false, vertical: true)
-                                Text("Choose a saved moment and write the caption beside a scene picture.")
+                                Text("The tags are already on the stops. A pull note is the extra line you want to keep.")
                                     .font(.subheadline)
                                     .foregroundStyle(Color.veyraInk.opacity(0.78))
                                     .lineLimit(nil)
@@ -58,7 +87,7 @@ struct VeyraCaptionRoll: View {
                         }
                     }
                     if vault.moments.isEmpty == false {
-                        VeyraPrimaryButton(title: "Write a caption") {
+                        VeyraPrimaryButton(title: "Write a pull note") {
                             composerMoment = vault.moments.sorted { $0.stampedOn > $1.stampedOn }.first
                         }
                     }
@@ -73,7 +102,7 @@ struct VeyraCaptionRoll: View {
                         VeyraCard {
                             VStack(alignment: .leading, spacing: 8) {
                                 VeyraStillFrame(key: leaf.imageKey, height: 110)
-                                Text(vault.moments.first { $0.id == leaf.momentID }?.placeLine ?? "Moment")
+                                Text(vault.moments.first { $0.id == leaf.momentID }?.placeLine ?? "Stop")
                                     .font(.headline)
                                     .foregroundStyle(Color.veyraInk)
                                     .lineLimit(nil)
@@ -113,7 +142,7 @@ struct VeyraCaptionRoll: View {
             VeyraCaptionEditor(starterMomentID: moment.id)
         }
         .confirmationDialog(
-            "Delete this caption?",
+            "Delete this pull note?",
             isPresented: Binding(
                 get: { pendingCaption != nil },
                 set: { if $0 == false { pendingCaption = nil } }
@@ -130,7 +159,7 @@ struct VeyraCaptionRoll: View {
                 pendingCaption = nil
             }
         } message: {
-            Text("The moment itself stays on the journey.")
+            Text("The stop itself stays on the route.")
         }
     }
 }

@@ -11,30 +11,52 @@ struct VeyraMosaicCanvas: View {
                 VStack(alignment: .leading, spacing: 14) {
                     VeyraStillFrame(key: VeyraStillRack.lake, height: 120)
                     VeyraHeaderBlock(
-                        title: "Highlights",
-                        detail: "Moments you mark appear here. Move them up or down to set the order."
+                        title: "Carry",
+                        detail: "The latest close keeps up to three stops for the next walk. Move them to set the order."
                     )
-                    if let banner = vault.veyraBanner {
-                        VeyraBannerLine(text: banner)
-                    }
-                    let pinned = vault.veyraHighlightMoments()
-                    if pinned.isEmpty {
+                    if let seal = vault.veyraLatestSeal() {
                         VeyraCard {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Image(systemName: "star.circle")
-                                    .font(.largeTitle)
-                                    .foregroundStyle(Color.veyraMint)
-                                Text("No Highlights Yet")
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text(vault.veyraTripTitle(seal.routeID))
                                     .font(.headline)
                                     .foregroundStyle(Color.veyraInk)
                                     .lineLimit(nil)
                                     .fixedSize(horizontal: false, vertical: true)
-                                Text("Open a moment and turn on Show in highlights.")
+                                Text(seal.residue)
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color.veyraInk.opacity(0.86))
+                                    .lineLimit(nil)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Text("Closed \(VeyraStampText.day(seal.sealedOn))")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.veyraMint)
+                                Text(vault.veyraQuietHourLabel())
+                                    .font(.footnote)
+                                    .foregroundStyle(Color.veyraInk.opacity(0.8))
+                                    .lineLimit(nil)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
+                    }
+                    if let banner = vault.veyraBanner {
+                        VeyraBannerLine(text: banner)
+                    }
+                    let pinned = vault.veyraCarriedMoments()
+                    if pinned.isEmpty {
+                        VeyraCard {
+                            VStack(alignment: .leading, spacing: 8) {
+                                VeyraEmptyMark(art: VeyraChromeArt.emptyCarry)
+                                Text("Nothing carried yet")
+                                    .font(.headline)
+                                    .foregroundStyle(Color.veyraInk)
+                                    .lineLimit(nil)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Text("Open a route and tap Close this route. Pick up to three stops and write the residue.")
                                     .font(.subheadline)
                                     .foregroundStyle(Color.veyraInk.opacity(0.78))
                                     .lineLimit(nil)
                                     .fixedSize(horizontal: false, vertical: true)
-                                VeyraPrimaryButton(title: "Go to trips") {
+                                VeyraPrimaryButton(title: "Go to routes") {
                                     vault.veyraFocusLane = .trips
                                 }
                             }
@@ -75,26 +97,22 @@ struct VeyraMosaicCanvas: View {
                                     NavigationLink {
                                         VeyraHighlightLeaf(momentID: moment.id)
                                     } label: {
-                                        Text("Open")
-                                            .font(.caption.weight(.bold))
-                                            .foregroundStyle(Color.veyraOnPrimary)
-                                            .frame(maxWidth: .infinity, minHeight: 36)
-                                            .background(Capsule().fill(Color.veyraMint))
+                                        VeyraPlateLabel(
+                                            title: "Open",
+                                            plate: VeyraChromeArt.primaryPlate,
+                                            titleColor: Color.veyraOnPrimary,
+                                            minHeight: 40
+                                        )
                                     }
                                     .buttonStyle(VeyraPressStyle())
                                     HStack(spacing: 6) {
-                                        Button("Up") {
+                                        VeyraIconChip(title: "Up", art: VeyraChromeArt.up, enabled: index != 0) {
                                             vault.veyraNudgeHighlight(moment.id, upward: true)
                                         }
-                                        .disabled(index == 0)
-                                        Button("Down") {
+                                        VeyraIconChip(title: "Down", art: VeyraChromeArt.down, enabled: index != pinned.count - 1) {
                                             vault.veyraNudgeHighlight(moment.id, upward: false)
                                         }
-                                        .disabled(index == pinned.count - 1)
                                     }
-                                    .font(.caption.weight(.bold))
-                                    .foregroundStyle(Color.veyraMint)
-                                    .buttonStyle(.bordered)
                                 }
                                 .padding(10)
                                 .background(

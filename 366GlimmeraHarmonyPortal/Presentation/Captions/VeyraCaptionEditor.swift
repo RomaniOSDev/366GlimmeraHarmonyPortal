@@ -22,10 +22,10 @@ struct VeyraCaptionEditor: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
                     VeyraHeaderBlock(
-                        title: "Caption",
-                        detail: "The words stay with the moment you pick. Choose one scene picture."
+                        title: "Pull note",
+                        detail: "The note stays with the stop you pick. Choose one night scene."
                     )
-                    Text("Moment")
+                    Text("Stop")
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(Color.veyraInk)
                     ForEach(vault.moments.sorted { $0.stampedOn > $1.stampedOn }) { moment in
@@ -54,8 +54,7 @@ struct VeyraCaptionEditor: View {
                                 }
                                 Spacer(minLength: 8)
                                 if moment.id == momentID {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundStyle(Color.veyraMint)
+                                    VeyraGlyphMark(name: VeyraChromeArt.check, size: 24)
                                 }
                             }
                             .padding(10)
@@ -67,7 +66,7 @@ struct VeyraCaptionEditor: View {
                         }
                         .buttonStyle(VeyraPressStyle())
                     }
-                    Text("Scene picture")
+                    Text("Night scene")
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(Color.veyraInk)
                     ForEach(VeyraStillRack.choices, id: \.self) { key in
@@ -88,7 +87,7 @@ struct VeyraCaptionEditor: View {
                         }
                         .buttonStyle(VeyraPressStyle())
                     }
-                    Text("Caption")
+                    Text("Note")
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(Color.veyraInk)
                     VeyraFieldShell {
@@ -106,7 +105,7 @@ struct VeyraCaptionEditor: View {
                             .lineLimit(nil)
                             .fixedSize(horizontal: false, vertical: true)
                     }
-                    VeyraPrimaryButton(title: "Save caption") {
+                    VeyraPrimaryButton(title: "Save pull note") {
                         veyraCommit()
                     }
                     VeyraQuietButton(title: "Cancel") {
@@ -117,7 +116,7 @@ struct VeyraCaptionEditor: View {
             }
             .scrollDismissesKeyboard(.immediately)
         }
-        .navigationTitle("Caption")
+        .navigationTitle("Pull note")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.visible, for: .navigationBar)
         .onAppear {
@@ -134,11 +133,11 @@ struct VeyraCaptionEditor: View {
     private func veyraCommit() {
         let note = captionBody.trimmingCharacters(in: .whitespacesAndNewlines)
         guard vault.moments.contains(where: { $0.id == momentID }) else {
-            trouble = "Choose a moment before saving."
+            trouble = "Choose a stop before saving."
             return
         }
         if note.isEmpty {
-            trouble = "Write a caption before saving."
+            trouble = "Write the pull note before saving."
             return
         }
         vault.veyraSaveCaption(VeyraCaptionLeaf(

@@ -11,11 +11,11 @@ struct VeyraPlaceLeaf: View {
                 VStack(alignment: .leading, spacing: 14) {
                     VeyraHeaderBlock(
                         title: placeLine,
-                        detail: "Newest moments with this place name, from every journey."
+                        detail: "Newest stops with this corner name, from every route."
                     )
                     let slips = vault.veyraMoments(at: placeLine)
                     if slips.isEmpty {
-                        Text("No moments use this place name now.")
+                        Text("No stops use this corner name now.")
                             .font(.subheadline)
                             .foregroundStyle(Color.veyraInk)
                             .lineLimit(nil)
@@ -50,17 +50,10 @@ struct VeyraPlaceLeaf: View {
                                     NavigationLink {
                                         VeyraTripLeaf(tripID: slip.tripID)
                                     } label: {
-                                        Text("Open journey")
-                                            .font(.subheadline.weight(.semibold))
-                                            .foregroundStyle(Color.veyraMint)
-                                            .multilineTextAlignment(.center)
-                                            .lineLimit(nil)
-                                            .frame(maxWidth: .infinity)
-                                            .padding(.vertical, 12)
-                                            .background(Capsule().stroke(Color.veyraMint, lineWidth: 1.5))
+                                        VeyraQuietLinkLabel(title: "Open route")
                                     }
                                     .buttonStyle(VeyraPressStyle())
-                                    VeyraQuietButton(title: "Edit") {
+                                    VeyraIconChip(title: "Edit", art: VeyraChromeArt.edit) {
                                         composer = slip
                                     }
                                 }
@@ -72,7 +65,7 @@ struct VeyraPlaceLeaf: View {
             }
             .scrollDismissesKeyboard(.interactively)
         }
-        .navigationTitle("Place")
+        .navigationTitle("Corner")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.visible, for: .navigationBar)
         .sheet(item: $composer) { slip in

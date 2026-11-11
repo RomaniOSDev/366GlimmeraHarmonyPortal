@@ -40,7 +40,7 @@ struct VeyraHighlightLeaf: View {
                                             )
                                         )
                                 )
-                            Text("No caption yet. You can still read the moment below.")
+                            Text("No pull note yet. You can still read the stop below.")
                                 .font(.footnote)
                                 .foregroundStyle(Color.veyraInk.opacity(0.75))
                                 .lineLimit(nil)
@@ -55,7 +55,7 @@ struct VeyraHighlightLeaf: View {
                             )
                         }
                         .buttonStyle(.plain)
-                        .accessibilityHint("Shows every moment at this place")
+                        .accessibilityHint("Shows every stop at this corner")
                         Text(VeyraStampText.day(moment.stampedOn))
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(Color.veyraMint)
@@ -67,27 +67,22 @@ struct VeyraHighlightLeaf: View {
                         if let banner = vault.veyraBanner {
                             VeyraBannerLine(text: banner)
                         }
-                        VeyraPrimaryButton(title: "Edit moment") {
+                        VeyraPrimaryButton(title: "Edit stop") {
                             composer = moment
                         }
                         NavigationLink {
                             VeyraCaptionEditor(starterMomentID: moment.id)
                         } label: {
-                            Text(vault.veyraCaption(for: moment.id) == nil ? "Write a caption" : "Edit caption")
-                                .font(.subheadline.weight(.semibold))
-                                .foregroundStyle(Color.veyraMint)
-                                .multilineTextAlignment(.center)
-                                .lineLimit(nil)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 12)
-                                .background(Capsule().stroke(Color.veyraMint, lineWidth: 1.5))
+                            VeyraQuietLinkLabel(
+                                title: vault.veyraCaption(for: moment.id) == nil ? "Write a pull note" : "Edit pull note"
+                            )
                         }
                         .buttonStyle(VeyraPressStyle())
-                        VeyraQuietButton(title: "Remove from highlights") {
+                        VeyraQuietButton(title: "Remove from carry") {
                             confirmUnpin = true
                         }
                     } else {
-                        Text("This highlight is no longer available.")
+                        Text("This carry is no longer available.")
                             .font(.body)
                             .foregroundStyle(Color.veyraInk)
                             .lineLimit(nil)
@@ -101,20 +96,20 @@ struct VeyraHighlightLeaf: View {
             }
             .scrollDismissesKeyboard(.immediately)
         }
-        .navigationTitle("Highlight")
+        .navigationTitle("Carry")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.visible, for: .navigationBar)
         .sheet(item: $composer) { slip in
             VeyraMomentComposer(starter: slip)
         }
-        .confirmationDialog("Remove from highlights?", isPresented: $confirmUnpin, titleVisibility: .visible) {
+        .confirmationDialog("Remove from the carry?", isPresented: $confirmUnpin, titleVisibility: .visible) {
             Button("Remove", role: .destructive) {
                 vault.veyraUnpin(momentID)
                 dismiss()
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("The moment stays on its journey.")
+            Text("The stop stays on its route.")
         }
     }
 }

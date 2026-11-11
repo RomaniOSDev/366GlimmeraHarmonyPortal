@@ -25,21 +25,21 @@ struct VeyraTripMaker: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 14) {
                         VeyraHeaderBlock(
-                            title: existing == nil ? "New journey" : "Edit journey",
-                            detail: "A title, a place note, and a cover scene are saved with the journey."
+                            title: existing == nil ? "New route" : "Edit route",
+                            detail: "A name, the street it belongs to, and a night scene are saved with the route."
                         )
                         Text("Title")
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(Color.veyraInk)
                         VeyraFieldShell {
-                            TextField("Name the journey", text: $title)
+                            TextField("Name the route", text: $title)
                                 .foregroundStyle(Color.veyraInk)
                         }
-                        Text("Place note")
+                        Text("Street")
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(Color.veyraInk)
                         VeyraFieldShell {
-                            TextField("Where does it belong?", text: $placeNote)
+                            TextField("Which street or corner?", text: $placeNote)
                                 .foregroundStyle(Color.veyraInk)
                         }
                         Text("Cover")
@@ -73,7 +73,7 @@ struct VeyraTripMaker: View {
                                 .lineLimit(nil)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
-                        VeyraPrimaryButton(title: "Save journey") {
+                        VeyraPrimaryButton(title: "Save route") {
                             veyraCommit()
                         }
                         VeyraQuietButton(title: "Cancel") {
@@ -84,7 +84,7 @@ struct VeyraTripMaker: View {
                 }
                 .scrollDismissesKeyboard(.interactively)
             }
-            .navigationTitle("Journey")
+            .navigationTitle("Route")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.visible, for: .navigationBar)
         }
@@ -95,11 +95,11 @@ struct VeyraTripMaker: View {
         let cleanTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
         let cleanPlace = placeNote.trimmingCharacters(in: .whitespacesAndNewlines)
         if cleanTitle.isEmpty {
-            trouble = "Add a journey title before saving."
+            trouble = "Add a route name before saving."
             return
         }
         if cleanPlace.isEmpty {
-            trouble = "Add a place note before saving."
+            trouble = "Add the street before saving."
             return
         }
         let trip = VeyraTripFolio(

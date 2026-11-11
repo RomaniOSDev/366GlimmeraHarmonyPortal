@@ -14,6 +14,7 @@ struct VeyraMomentComposer: View {
     @State private var placeLine: String
     @State private var stampedOn: Date
     @State private var pinnedHighlight: Bool
+    @State private var pullKind: String
     @State private var photoFile: String?
     @State private var photoData: Data?
     @State private var photoCleared = false
@@ -28,6 +29,7 @@ struct VeyraMomentComposer: View {
         _placeLine = State(initialValue: starter.placeLine)
         _stampedOn = State(initialValue: starter.stampedOn)
         _pinnedHighlight = State(initialValue: starter.pinnedHighlight)
+        _pullKind = State(initialValue: starter.pullKind ?? VeyraPullKind.light.rawValue)
         _photoFile = State(initialValue: starter.photoFile)
     }
 
@@ -37,10 +39,10 @@ struct VeyraMomentComposer: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 14) {
                         VeyraHeaderBlock(
-                            title: "Moment",
-                            detail: "Pick an icon, name the place, add a photo if you want, and write what you want to remember."
+                            title: "Stop",
+                            detail: "Name the corner, tag what pulled you off the walk, and offer it for the close if it should be carried."
                         )
-                        Text("Journey")
+                        Text("Route")
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(Color.veyraInk)
                         ForEach(vault.trips) { trip in
@@ -55,8 +57,7 @@ struct VeyraMomentComposer: View {
                                         .fixedSize(horizontal: false, vertical: true)
                                     Spacer(minLength: 8)
                                     if trip.id == tripID {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .foregroundStyle(Color.veyraMint)
+                                        VeyraGlyphMark(name: VeyraChromeArt.check, size: 24)
                                     }
                                 }
                                 .padding(10)
@@ -79,23 +80,46 @@ struct VeyraMomentComposer: View {
                                     Text(mark)
                                         .font(.title2)
                                         .frame(maxWidth: .infinity, minHeight: 44)
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                                .fill(iconGlyph == mark ? Color.veyraMint.opacity(0.35) : Color.veyraCard)
-                                        )
+                                        .background {
+                                            VeyraPlateSkin(name: iconGlyph == mark ? VeyraChromeArt.primaryPlate : VeyraChromeArt.quietPlate)
+                                        }
+                                        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                                 }
                                 .buttonStyle(VeyraPressStyle())
                                 .accessibilityLabel("Icon \(mark)")
                             }
                         }
-                        Text("Place")
+                        Text("Pull")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(Color.veyraInk)
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
+                            ForEach(VeyraPullKind.allCases) { kind in
+                                Button {
+                                    pullKind = kind.rawValue
+                                } label: {
+                                    Text(kind.title)
+                                        .font(.caption.weight(.bold))
+                                        .foregroundStyle(pullKind == kind.rawValue ? Color.veyraOnPrimary : Color.veyraGlow)
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.8)
+                                        .padding(.horizontal, 8)
+                                        .frame(maxWidth: .infinity, minHeight: 42)
+                                        .background {
+                                            VeyraPlateSkin(name: pullKind == kind.rawValue ? VeyraChromeArt.primaryPlate : VeyraChromeArt.quietPlate)
+                                        }
+                                        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                }
+                                .buttonStyle(VeyraPressStyle())
+                            }
+                        }
+                        Text("Corner")
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(Color.veyraInk)
                         VeyraFieldShell {
-                            TextField("Place name", text: $placeLine)
+                            TextField("Corner or crossing", text: $placeLine)
                                 .foregroundStyle(Color.veyraInk)
                         }
-                        Text("Reflection")
+                        Text("What stopped you")
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(Color.veyraInk)
                         VeyraFieldShell {
@@ -119,18 +143,7 @@ struct VeyraMomentComposer: View {
                             VeyraPhotoFrame(fileName: photoFile, height: 160)
                         }
                         PhotosPicker(selection: $pickerItem, matching: .images) {
-                            Text("Choose a photo")
-                                .font(.subheadline.weight(.semibold))
-                                .foregroundStyle(Color.veyraMint)
-                                .multilineTextAlignment(.center)
-                                .lineLimit(nil)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 12)
-                                .padding(.horizontal, 10)
-                                .background(
-                                    Capsule(style: .continuous)
-                                        .stroke(Color.veyraMint, lineWidth: 1.5)
-                                )
+                            VeyraQuietLinkLabel(title: "Choose a photo")
                         }
                         .buttonStyle(VeyraPressStyle())
                         if photoData != nil || (photoCleared == false && photoFile != nil) {
@@ -143,7 +156,7 @@ struct VeyraMomentComposer: View {
                         DatePicker("Date", selection: $stampedOn, displayedComponents: .date)
                             .foregroundStyle(Color.veyraInk)
                         Toggle(isOn: $pinnedHighlight) {
-                            Text("Show in highlights")
+                            Text("Offer for the close")
                                 .foregroundStyle(Color.veyraInk)
                                 .lineLimit(nil)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -156,7 +169,7 @@ struct VeyraMomentComposer: View {
                                 .lineLimit(nil)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
-                        VeyraPrimaryButton(title: "Save moment") {
+                        VeyraPrimaryButton(title: "Save stop") {
                             veyraCommit()
                         }
                         VeyraQuietButton(title: "Cancel") {
@@ -166,7 +179,7 @@ struct VeyraMomentComposer: View {
                     .padding(16)
                 }
                 .scrollDismissesKeyboard(.interactively)
-                .onChange(of: pickerItem) { item in
+                .onChange(of: pickerItem) { _, item in
                     guard let item else { return }
                     Task {
                         if let picked = try? await item.loadTransferable(type: VeyraPickedPhoto.self) {
@@ -178,7 +191,7 @@ struct VeyraMomentComposer: View {
                     }
                 }
             }
-            .navigationTitle("Moment")
+            .navigationTitle("Stop")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.visible, for: .navigationBar)
         }
@@ -189,15 +202,15 @@ struct VeyraMomentComposer: View {
         let place = placeLine.trimmingCharacters(in: .whitespacesAndNewlines)
         let note = reflection.trimmingCharacters(in: .whitespacesAndNewlines)
         guard vault.trips.contains(where: { $0.id == tripID }) else {
-            trouble = "Choose a journey before saving."
+            trouble = "Choose a route before saving."
             return
         }
         if place.isEmpty {
-            trouble = "Add the place before saving."
+            trouble = "Add the corner before saving."
             return
         }
         if note.isEmpty {
-            trouble = "Write a reflection before saving."
+            trouble = "Write what stopped you before saving."
             return
         }
         var file = photoCleared ? nil : photoFile
@@ -220,7 +233,8 @@ struct VeyraMomentComposer: View {
             stampedOn: stampedOn,
             pinnedHighlight: pinnedHighlight,
             ordinal: starter.ordinal,
-            photoFile: file
+            photoFile: file,
+            pullKind: pullKind
         ))
         dismiss()
     }

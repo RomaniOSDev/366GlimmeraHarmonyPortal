@@ -4,50 +4,43 @@ struct VeyraDockChrome: View {
     @Binding var lane: VeyraDockLane
 
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 4) {
             ForEach(VeyraDockLane.allCases) { item in
+                let chosen = lane == item
                 Button {
                     lane = item
                 } label: {
-                    VStack(spacing: 4) {
-                        Image(systemName: item.veyraSymbol)
-                            .font(.body.weight(.semibold))
+                    VStack(spacing: 3) {
+                        VeyraGlyphMark(
+                            name: item.veyraSymbol,
+                            size: 24,
+                            tint: chosen ? Color.veyraOnPrimary : Color.veyraGlow
+                        )
                         Text(item.veyraTitle)
-                            .font(.caption.weight(.semibold))
-                            .lineLimit(nil)
-                            .multilineTextAlignment(.center)
+                            .font(.caption2.weight(.bold))
+                            .foregroundStyle(chosen ? Color.veyraOnPrimary : Color.veyraInk.opacity(0.82))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
                     }
-                    .foregroundStyle(lane == item ? Color.veyraOnPrimary : Color.veyraInk)
-                    .frame(maxWidth: .infinity, minHeight: 48)
-                    .padding(.vertical, 6)
-                    .contentShape(Capsule())
+                    .frame(maxWidth: .infinity, minHeight: 50)
                     .background {
-                        if lane == item {
-                            Capsule(style: .continuous)
-                                .fill(
-                                    LinearGradient(
-                                        colors: [Color.veyraMint, Color.veyraGlow],
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    )
-                                )
+                        if chosen {
+                            VeyraPlateSkin(name: VeyraChromeArt.primaryPlate)
                         }
                     }
+                    .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 }
                 .buttonStyle(VeyraPressStyle())
-                .contentShape(Capsule())
                 .accessibilityLabel(item.veyraTitle)
-                .accessibilityAddTraits(lane == item ? .isSelected : [])
+                .accessibilityAddTraits(chosen ? .isSelected : [])
             }
         }
-        .padding(.horizontal, 6)
-        .padding(.vertical, 6)
+        .padding(6)
         .background {
-            Capsule(style: .continuous)
-                .fill(Color.veyraCard)
-                .shadow(color: Color.black.opacity(0.16), radius: 10, y: 4)
+            VeyraPlateSkin(name: VeyraChromeArt.dockPlate)
+                .shadow(color: Color.black.opacity(0.4), radius: 12, y: 6)
         }
-        .padding(.horizontal, 16)
+        .padding(.horizontal, 12)
         .padding(.bottom, 8)
     }
 }
